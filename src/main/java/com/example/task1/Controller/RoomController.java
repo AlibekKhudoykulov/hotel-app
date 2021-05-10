@@ -73,71 +73,21 @@ public class RoomController {
             return "Already exist";
         }
         Room room = byId.get();
-        if (roomDTO.getFloor() == null && roomDTO.getSize().equals(null) && roomDTO.getHotel_id() == null) {
+        if (roomDTO.getNumber()!=null) {
             if (roomRepository.existsByNumber(roomDTO.getNumber())) return "Already exist this room number";
             room.setNumber(roomDTO.getNumber());
-            roomRepository.save(room);
-            return "Changed succesfully";
         }
-        if (roomDTO.getNumber()==null && roomDTO.getSize().equals(null) && roomDTO.getHotel_id()==null){
+        if (roomDTO.getFloor()!=null){
             room.setFloor(roomDTO.getFloor());
-            roomRepository.save(room);
-            return "Changed succesfully";
         }
-        if (roomDTO.getNumber()==null && roomDTO.getFloor()==null && roomDTO.getHotel_id()==null){
+        if (!roomDTO.getSize().equals(null)){
             room.setSize(roomDTO.getSize());
-            roomRepository.save(room);
-            return "Changed succesfully";
         }
-
-        if (roomDTO.getNumber()==null && roomDTO.getSize().equals(null) && roomDTO.getFloor()==null){
+        if (roomDTO.getHotel_id()!=null){
             room.setHotel(hotelRepository.getOne(roomDTO.getHotel_id()));
-            roomRepository.save(room);
-            return "Changed succesfully";
         }
-        if (roomDTO.getSize().equals(null) && roomDTO.getHotel_id()==null){
-            room.setNumber(roomDTO.getNumber());
-            room.setFloor(roomDTO.getFloor());
-            roomRepository.save(room);
-            return "Changed succesfully";
-        }
-        if (roomDTO.getFloor()==null && roomDTO.getHotel_id()==null){
-            room.setNumber(roomDTO.getNumber());
-            room.setSize(roomDTO.getSize());
-            roomRepository.save(room);
-            return "Changed succesfully";
-        }
-        if (roomDTO.getSize().equals(null) && roomDTO.getFloor()==null ){
-            room.setNumber(roomDTO.getNumber());
-            room.setHotel(hotelRepository.getOne(roomDTO.getHotel_id()));
-            roomRepository.save(room);
-            return "Changed succesfully";
-        }
-        if (roomDTO.getNumber()==null && roomDTO.getHotel_id()==null){
-            room.setFloor(roomDTO.getFloor());
-            room.setSize(roomDTO.getSize());
-            roomRepository.save(room);
-            return "Changed succesfully";
-        }if (roomDTO.getNumber()==null && roomDTO.getSize().equals(null)){
-            room.setFloor(roomDTO.getFloor());
-            room.setHotel(hotelRepository.getOne(roomDTO.getHotel_id()));
-            roomRepository.save(room);
-            return "Changed succesfully";
-        }
-        if (roomDTO.getNumber()==null && roomDTO.getFloor()==null){
-            room.setSize(roomDTO.getSize());
-            room.setHotel(hotelRepository.getOne(roomDTO.getHotel_id()));
-            roomRepository.save(room);
-            return "Changed succesfully";
-        }
-
-
-        room.setNumber(roomDTO.getNumber());
-        room.setFloor(roomDTO.getFloor());
-        room.setSize(roomDTO.getSize());
-        room.setHotel(hotelRepository.getOne(roomDTO.getHotel_id()));
         roomRepository.save(room);
-        return "Changed succesfully";
+        return "Edit succesfully";
     }
 
 }
