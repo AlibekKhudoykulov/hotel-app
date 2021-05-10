@@ -51,7 +51,7 @@ public class RoomController {
     @PostMapping
     public String add(@RequestBody RoomDTO roomDTO) {
         if (roomRepository.existsByNumber(roomDTO.getNumber())) return "This room number already exist";
-        if (roomRepository.existsByNumberAndFloorAndSizeAndHotel_Id(roomDTO.getNumber(), roomDTO.getFloor(), roomDTO.getSize(), roomDTO.getHotel_id()))
+        if (roomRepository.existsByNumberAndAndHotel_Id(roomDTO.getNumber(), roomDTO.getHotel_id()))
             return "Already exist";
         if (!hotelRepository.findById(roomDTO.getHotel_id()).isPresent()) return "Hotel not found";
 
@@ -69,18 +69,17 @@ public class RoomController {
         Optional<Room> byId = roomRepository.findById(id);
         if (!byId.isPresent()) return "Not found";
         if (!hotelRepository.findById(roomDTO.getHotel_id()).isPresent()) return "Hotel not found";
-        if (roomRepository.existsByNumberAndFloorAndSizeAndHotel_Id(roomDTO.getNumber(), roomDTO.getFloor(), roomDTO.getSize(), roomDTO.getHotel_id())) {
+        if (roomRepository.existsByNumberAndAndHotel_Id(roomDTO.getNumber(), roomDTO.getHotel_id())) {
             return "Already exist";
         }
         Room room = byId.get();
         if (roomDTO.getNumber()!=null) {
-            if (roomRepository.existsByNumber(roomDTO.getNumber())) return "Already exist this room number";
             room.setNumber(roomDTO.getNumber());
         }
         if (roomDTO.getFloor()!=null){
             room.setFloor(roomDTO.getFloor());
         }
-        if (!roomDTO.getSize().equals(null)){
+        if (roomDTO.getSize() != null){
             room.setSize(roomDTO.getSize());
         }
         if (roomDTO.getHotel_id()!=null){

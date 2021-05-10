@@ -10,5 +10,5 @@ import java.util.List;
 public interface RoomRepository extends JpaRepository<Room,Integer> {
     boolean existsByNumber(Integer number);
     Page<Room> findAllByHotel_Id(Integer hotel_id, Pageable pageable);
-    boolean existsByNumberAndFloorAndSizeAndHotel_Id(Integer number, Integer floor, String size, Integer hotel_id);
+    boolean existsByNumberAndAndHotel_Id(Integer number, Integer hotel_id);
 }
