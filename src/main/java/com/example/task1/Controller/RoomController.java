@@ -51,15 +51,16 @@ public class RoomController {
     @PostMapping
     public String add(@RequestBody RoomDTO roomDTO) {
         if (roomRepository.existsByNumber(roomDTO.getNumber())) return "This room number already exist";
-        if (roomRepository.existsByNumberAndAndHotel_Id(roomDTO.getNumber(), roomDTO.getHotel_id()))
-            return "Already exist";
         if (!hotelRepository.findById(roomDTO.getHotel_id()).isPresent()) return "Hotel not found";
+        if (roomRepository.existsByNumberAndHotelId(roomDTO.getNumber(), roomDTO.getHotel_id()))
+            return "Already exist";
 
         Room room = new Room();
         room.setNumber(roomDTO.getNumber());
         room.setFloor(roomDTO.getFloor());
         room.setSize(roomDTO.getSize());
         room.setHotel(hotelRepository.getOne(roomDTO.getHotel_id()));
+        roomRepository.save(room);
         return "Added succesfully";
 
     }
@@ -68,13 +69,17 @@ public class RoomController {
     public String edit(@PathVariable Integer id, @RequestBody RoomDTO roomDTO) {
         Optional<Room> byId = roomRepository.findById(id);
         if (!byId.isPresent()) return "Not found";
-        if (!hotelRepository.findById(roomDTO.getHotel_id()).isPresent()) return "Hotel not found";
-        if (roomRepository.existsByNumberAndAndHotel_Id(roomDTO.getNumber(), roomDTO.getHotel_id())) {
-            return "Already exist";
-        }
+//        if (!hotelRepository.findById(roomDTO.getHotel_id()).isPresent()) return "Hotel not found";
+//        if (roomRepository.existsByNumberAndHotel_Id(roomDTO.getNumber(), roomDTO.getHotel_id())) {
+//            return "Already exist";
+//        }
         Room room = byId.get();
-        if (roomDTO.getNumber()!=null) {
-            room.setNumber(roomDTO.getNumber());
+        if (roomDTO.getNumber()!=null ) {
+            if (!roomRepository.existsByNumberAndHotelId(roomDTO.getNumber(),room.getHotel().getId())) {
+                room.setNumber(roomDTO.getNumber());
+            }else {
+                return "Already exist";
+            }
         }
         if (roomDTO.getFloor()!=null){
             room.setFloor(roomDTO.getFloor());
